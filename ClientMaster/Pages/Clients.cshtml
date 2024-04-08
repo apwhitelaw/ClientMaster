@@ -1,0 +1,40 @@
+﻿@page
+@model ClientMaster.Pages.ClientsModel
+@{
+    ViewData["Title"] = "Clients";
+}
+
+<div class="text-center">
+    <h1>Clients</h1>
+    <label class="pt-1 pb-3" style="color: @Model.MessageColor">@Model.Message</label>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th><label>First Name</label></th>
+                <th><label>Last Name</label></th>
+                <th><label>Date of Birth</label></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Model.ClientIList)
+            {
+                <tr>
+                    <td><label>@client.FirstName</label></td>
+                    <td><label>@client.LastName</label></td>
+                    <td><label>@client.DateOfBirth.ToShortDateString()</label></td>
+                    <td>
+                        <a asp-page="/DeleteClient" asp-route-ClientID="@client.ClientID"><img src="~/images/trash.svg"></img></a>
+                        <a asp-page="/EditClient" asp-route-ClientID="@client.ClientID"><img src="~/images/pencil-square.svg"></img></a>
+                        <a asp-page="/ViewClient" asp-route-ClientID="@client.ClientID"><img src="~/images/arrow-right-square.svg"></img></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-page="/AddClient" class="btn btn-primary">Add New Client</a>
+
+</div>

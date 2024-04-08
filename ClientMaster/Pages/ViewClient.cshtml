@@ -1,0 +1,136 @@
+﻿@page
+@model ClientMaster.Pages.ViewClientModel
+@{
+    ViewData["Title"] = "View Client";
+}
+
+<h1>@Model.Client.FirstName @Model.Client.LastName</h1>
+<label class="pt-1 pb-3" style="color: @Model.MessageColor">@Model.Message</label>
+
+<div class="container">
+
+    <div class="row p-1">
+        <div class="col-4 w-auto">
+            <label asp-for="Client.FirstName" class="fw-bold">First Name: </label>
+            <span>@Model.Client.FirstName</span>
+        </div>
+        <div class="col-4 w-auto">
+            <label asp-for="Client.LastName" class="fw-bold">Last Name: </label>
+            <span>@Model.Client.LastName</span>
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-4">
+            <label asp-for="Client.DateOfBirth" class="fw-bold">Date of Birth: </label>
+            <span>@Model.Client.DateOfBirth.ToShortDateString()</span>
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-8">
+            <label asp-for="Client.StreetAddressLine1" class="fw-bold">Street Address Line 1: </label>
+            <span>@Model.Client.StreetAddressLine1</span>
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-8">
+            <label asp-for="Client.StreetAddressLine2" class="fw-bold">Street Address Line 2: </label>
+            <span>@Model.Client.StreetAddressLine2</span>
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-3 w-auto">
+            <label asp-for="Client.City" class="fw-bold">City: </label>
+            <span>@Model.Client.City</span>
+        </div>
+        <div class="col-3 w-auto">
+            <label asp-for="Client.State" class="fw-bold">State: </label>
+            <span>@Model.Client.State</span>
+        </div>
+        <div class="col-2 w-auto">
+            <label asp-for="Client.Zip" class="fw-bold">Zip: </label>
+            <span>@Model.Client.Zip</span>
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="3"><label>Phone Numbers</label></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Client.PhoneNumbers != null && Model.Client.PhoneNumbers.Any())
+                    {
+                        int phoneIndex = 1;
+                        
+                        @foreach (var number in Model.Client.PhoneNumbers)
+                        {
+                            <tr>
+                                <td>@phoneIndex</td>
+                                <td><label>@number.Number</label></td>
+                            </tr>
+                            phoneIndex++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">No phone numbers available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="3"><label>Email Addresses</label></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Client.EmailAddresses != null && Model.Client.EmailAddresses.Any())
+                    {
+                        int emailIndex = 1;
+
+                        @foreach (var email in Model.Client.EmailAddresses)
+                        {
+                            <tr>
+                                <td>@emailIndex</td>
+                                <td><label>@email.Email</label></td>
+                            </tr>
+                            emailIndex++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">No email addresses available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row p-3 ps-0">
+        <div class="col-3 w-auto">
+            <label asp-for="Client.ReferringClientID" class="fw-bold">Referring Client: </label>
+            @if (Model.Client.ReferringClientID != null)
+            {
+                <a asp-route-ClientID="@Model.Client.ReferringClientID">@Model.Client.ReferringClient.FirstName @Model.Client.ReferringClient.LastName</a>
+            }
+            else
+            {
+                <span>None</span>
+            }
+            
+        </div>
+    </div>
+    <div class="row p-3">
+        <div class="col-3 w-auto">
+            <a asp-page="Clients" class="btn btn-primary">Return</a>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,148 @@
+﻿@page
+@model ClientMaster.Pages.EditClientModel
+@{
+    ViewData["Title"] = "Edit Client";
+}
+
+<h1>Edit Client</h1>
+<label class="pt-1 pb-3" style="color: @Model.MessageColor">@Model.Message</label>
+
+<div class="container">
+    <form method="post">
+        <input asp-for="Client.ClientID" type="hidden" />
+
+        <div class="row p-1">
+            <div class="col-4 w-auto">
+                <label asp-for="Client.FirstName">First Name</label>
+                <input asp-for="Client.FirstName" />
+            </div>
+            <div class="col-4 w-auto">
+                <label asp-for="Client.LastName">Last Name</label>
+                <input asp-for="Client.LastName" />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-4">
+                <label asp-for="Client.DateOfBirth">Date of Birth</label>
+                <input asp-for="Client.DateOfBirth" type="date" />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-8">
+                <label asp-for="Client.StreetAddressLine1">Street Address Line 1</label>
+                <input asp-for="Client.StreetAddressLine1" class="w-50" />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-8">
+                <label asp-for="Client.StreetAddressLine2">Street Address Line 2</label>
+                <input asp-for="Client.StreetAddressLine2" class="w-50" />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-3 w-auto">
+                <label asp-for="Client.City">City</label>
+                <input asp-for="Client.City" />
+            </div>
+            <div class="col-3 w-auto">
+                <label asp-for ="Client.State">State</label>
+                <select asp-for="Client.State" asp-items="@Model.StateSelectList">
+                </select>
+            </div>
+            <div class="col-2 w-auto">
+                <label asp-for="Client.Zip">Zip</label>
+                <input asp-for="Client.Zip" maxlength="5" size="5" />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="2"><label>Phone Numbers</label></th>
+                            <th><label>Delete?</label></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Client.PhoneNumbers != null && Model.Client.PhoneNumbers.Any())
+                        {
+                            int phoneIndex = 1;
+
+                            @foreach (var number in Model.Client.PhoneNumbers)
+                            {
+                                <tr>
+                                    <td>@phoneIndex</td>
+                                    <td><label>@number.Number</label></td>
+                                    <td><input type="checkbox" name="selectedNumbers" value="@number.PhoneNumberID" /></td>
+                                </tr>
+                                phoneIndex++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">No phone numbers available</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>New</td>
+                            <td><input asp-for="AddNumber"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="2"><label>Email Addresses</label></th>
+                            <th><label>Delete?</label></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Client.EmailAddresses != null && Model.Client.EmailAddresses.Any())
+                        {
+                            int emailIndex = 1;
+
+                            @foreach (var email in Model.Client.EmailAddresses)
+                            {
+                                <tr>
+                                    <td>@emailIndex</td>
+                                    <td><label>@email.Email</label></td>
+                                    <td><input type="checkbox" name="selectedEmails" value="@email.EmailAddressID" /></td>
+                                </tr>
+                                emailIndex++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">No email addresses available</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>New</td>
+                            <td><input asp-for="AddEmail" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row p-3 ps-0">
+            <div class="col-3 w-auto">
+                <label asp-for="Client.ReferringClientID">Referring Client</label>
+                <select asp-for="Client.ReferringClientID" asp-items="@Model.ReferrerSelectList">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-3 w-auto">
+                <a asp-page="Clients">Cancel</a>
+            </div>
+            <div class="col-3 w-auto">
+                <input value="Update Client" type="submit" class="btn btn-primary" asp-page-handler="UpdateClient" />
+            </div>
+        </div>
+    </form>
+</div>
