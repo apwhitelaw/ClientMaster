@@ -32,7 +32,7 @@ public class ClientsModel : PageModel
             MessageColor = TempData["strMessageColor"].ToString();
         }
 
-
+        // Get all clients from Client table
         ClientIList = await ClientBaseContext.Clients.ToListAsync();
     }
 }

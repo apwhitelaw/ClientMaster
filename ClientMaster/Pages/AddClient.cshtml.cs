@@ -47,6 +47,7 @@ public class AddClientModel : PageModel
 
         StateSelectList = new SelectList(states);
 
+        // Load Referrer SelectList with all clients
         var ClientList = ClientBaseContext.Clients.Select(c => new { c.ClientID, Name = c.FirstName + " " + c.LastName }).ToList();
         ReferrerSelectList = new SelectList(ClientList, "ClientID", "Name");
     }
@@ -55,10 +56,11 @@ public class AddClientModel : PageModel
     {
         try
         {
-
+            // Add client to Client table
             ClientBaseContext.Clients.Add(Client);
             await ClientBaseContext.SaveChangesAsync();
 
+            // If entered, add phone number or email to respective database table
             if (AddNumber != null)
             {
                 PhoneNumber number = new PhoneNumber { ClientID = Client.ClientID, Number = AddNumber };

@@ -28,6 +28,7 @@ public class DeleteClientModel : PageModel
         MessageColor = "Green";
         Message = "Edit any information and click Update Client.";
 
+        // Get selected client via ClientID
         Client = await ClientBaseContext.Clients.FindAsync(ClientID);
 
         if (Client != null)
@@ -47,6 +48,7 @@ public class DeleteClientModel : PageModel
     {
         try
         {
+            // Remove Client from table
             ClientBaseContext.Clients.Remove(Client);
             await ClientBaseContext.SaveChangesAsync();
 
@@ -56,6 +58,7 @@ public class DeleteClientModel : PageModel
         catch (DbUpdateException dbUpdateException)
         {
             SqlException dbSqlException = dbUpdateException.InnerException as SqlException;
+            // Unique error message if Client is set as referrer of another Client
             if (dbSqlException.Number == 547)
             {
                 TempData["strMessageColor"] = "Red";

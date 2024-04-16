@@ -13,10 +13,12 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    // Reset database upon launch
     var dbContext = scope.ServiceProvider.GetRequiredService<ClientBaseContext>();
     dbContext.Database.EnsureDeleted();
     dbContext.Database.EnsureCreated();
 
+    // Populate database
     if(!dbContext.Clients.Any())
     {
         dbContext.Clients.AddRange(

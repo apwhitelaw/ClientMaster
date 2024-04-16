@@ -34,7 +34,7 @@ public class EditClientModel : PageModel
 
         if (Client != null)
         {
-
+            // Load other properties related to Client from database
             await ClientBaseContext.Entry(Client)
                 .Reference(c => c.ReferringClient)
                 .LoadAsync();
@@ -63,6 +63,7 @@ public class EditClientModel : PageModel
 
             StateSelectList = new SelectList(states);
 
+            // Load SelectList with all clients except current ClientID
             var ClientList = ClientBaseContext.Clients
                 .Where(c => c.ClientID != Client.ClientID)
                 .Select(c => new { c.ClientID, Name = c.FirstName + " " + c.LastName }).ToList();
@@ -81,12 +82,13 @@ public class EditClientModel : PageModel
 
     public async Task<IActionResult> OnPostUpdateClientAsync()
     {
-
+        // Get list of checkmarked phone numbers and email addresses
         var selectedNumbers = Request.Form["selectedNumbers"].ToList();
         var selectedEmails = Request.Form["selectedEmails"].ToList();
 
         try
         {
+            // Remove each select phone number
             foreach (var id in selectedNumbers)
             {
                 PhoneNumber number = ClientBaseContext.PhoneNumbers.Find(Int32.Parse(id));
@@ -96,6 +98,7 @@ public class EditClientModel : PageModel
                 }
             }
 
+            // Remove each selected email address
             foreach (var id in selectedEmails)
             {
                 EmailAddress email = ClientBaseContext.EmailAddresses.Find(Int32.Parse(id));
@@ -106,6 +109,7 @@ public class EditClientModel : PageModel
 
             }
 
+            // If entered, add phone number or email to respective database table
             if (AddNumber != null)
             {
                 PhoneNumber number = new PhoneNumber { ClientID = Client.ClientID, Number = AddNumber };
@@ -118,6 +122,7 @@ public class EditClientModel : PageModel
                 ClientBaseContext.EmailAddresses.Add(email);
             }
 
+            // Update the existing entry of Client in the table
             ClientBaseContext.Clients.Update(Client);
             await ClientBaseContext.SaveChangesAsync();
 
